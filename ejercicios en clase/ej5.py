@@ -1,0 +1,5 @@
+salario=float(input('ingrese su salario: '))
+ahorro=float(input('ingrese el porcentaje que ahorra mensualmente: '))
+producto=float(input('ingrese el valor del producto que desea comprar: '))
+meses=producto/(salario*ahorro/100)
+print('el numero de meses que le llevara ahorrar para comprar el producto es: ', meses)
