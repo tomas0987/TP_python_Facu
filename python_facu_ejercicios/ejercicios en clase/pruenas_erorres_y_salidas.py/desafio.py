@@ -61,4 +61,4 @@ print(f"total de comisiones: {total_comisiones}")
 #muestra el mayor legajo con el mayor monto de ventas
 max_monto= max(monto_ventas)
 indice_max = monto_ventas.index(max_monto)
-print(f"el legajo con el mayor monto de ventas es: {legajo_vendedores[indice_max]}, con un monto de ventas de: {max_monto}")                    
+print(f"el legajo con el mayor monto de ventas es: {legajo_vendedores[indice_max]}, con un monto de ventas de: {max_monto:.2f}")                    
