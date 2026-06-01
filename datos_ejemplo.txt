@@ -1,0 +1,4 @@
+Linea 1: Esto es un ejemplo de escritura.
+Linea 2: Los datos se guardan en el archivo.
+Linea 3: Este texto se agrega al final. datos_ejemplo.txt
+ Linea 4: Podemos seguir usando la información guardada.
