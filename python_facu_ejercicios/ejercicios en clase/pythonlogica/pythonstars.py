@@ -1,57 +1,77 @@
+import random, shutil, time
+
 class potion:
-    def life_potion(self,cantlife):
-      self.cantlife=cantlife
-      p.life+=self.cantlife
-      if p.life==500:
-          print("salud al maximo no se precisa de curar")
+    def health_potion(self, amount):
+      self.amount = amount
+      heroe.health += self.amount
+      if heroe.life == 500:
+          print("Salud al maximo no se precisa de curar")
       else:
-          print("te has curado")
-          print("vida actual{p.currenhealth}")
-
-
-
-
-
-
-
-
-
-
-
-
-
+          print("Te has curado")
+          print(f"HP: {p.currenhealth}")
 
 class character:
-    def __init__(self, name, _life,_currenthealth,damage, critChance):
+    def __init__(self, name, health, _currentHealth, damage, critChance, critMultiplier):
         self.name = name
-        self.life = life
+        self.health = health
+        self._currentHealth= _currentHealth
         self.damage = damage
-        self._currenthealth=_currenthealth
+        self.critChance = critChance
+        self.critMultiplier = critMultiplier
 
     def attack(self, target):
-        damage = self.damage
-        target.receiveDamage(damage)
+        realDamage = self.damage * random.uniform(0.9, 1.15)
 
-        
+        target.receiveDamage(realDamage)
     
     def receiveDamage(self, damage):
-        self.life -= damage
-        if self.life <= 0:
-            print(f"{self.name} has been defeated.")
-            duendecito= character("duende",200,10,0.666,0.333)
+        self.health -= damage
+        if self.health <= 0:
+            print(f"Has matado a {self.name}...")
         else:
-            print(f"{self.name} has {self.life} life remaining.")
-    def currenthealth(self):
-        return self._currenthealth
+            print(f"{self.name} tiene {self.life} puntos de vida.")
     
-    
+    def getCurrentHealth(self):
+        return self._currentHealth
 
+# "Interfaz" profesional
+width = shutil.get_terminal_size().columns # Para centrar el titulo
 
+# Darle color al logo 31m: rojo, 37m: blanco
 
+logo="""                                
+\033[31m                   ▄▄                \033[0m
+\033[31m              ██   ██                \033[0m
+\033[31m ████▄ ██ ██ ▀██▀▀ ████▄ ▄███▄ ████▄ \033[0m
+\033[31m ██ ██ ██▄██  ██   ██ ██ ██ ██ ██ ██ \033[0m
+\033[31m ████▀  ▀██▀  ██   ██ ██ ▀███▀ ██ ██ \033[0m
+\033[31m ██      ██                          \033[0m
+\033[31m ▀▀    ▀▀▀                           \033[0m
+\033[37m            ██                       \033[0m
+\033[37m     ▄█▀▀▀ ▀██▀▀ ▀▀█▄ ████▄ ▄█▀▀▀    \033[0m
+\033[37m     ▀███▄  ██  ▄█▀██ ██ ▀▀ ▀███▄    \033[0m
+\033[37m     ▄▄▄█▀  ██  ▀█▄██ ██    ▄▄▄█▀    \033[0m
+"""
 
-print("welcome to the best game of the universe!!!!!!!!!")
-p=character("chiquito",500,50,25)
+for line in logo.split("\n"):
+    print(line.center(width))
 
+creditos ="""
+\033[30m       Built by:     \033[0m
+\033[30m    Tomas Sanchez    \033[0m
+\033[30m     Franco Leone    \033[0m
+"""
+
+print("\033[30mPor: Tomas Sanchez y Franco Leone\033[0m".center(width))
+
+heroe = character("Heroe",500,500,50,0.1,2)
+
+grandote = character("Grandote", 2000, 2000, 75, 0, 0)
+
+if grandote.getCurrentHealth() <= 0: # Arreglar -----------------------------------------------------------------------------------------------------
+    time.sleep(1) # Es para agregar suspenso al juego, completamente necesario
+    print("Grandecito llevaba consigo un duende!")
+    duendecito = character("duende",200, 200, 30, 0.666, 1.5)
 
 while True:
     pass
