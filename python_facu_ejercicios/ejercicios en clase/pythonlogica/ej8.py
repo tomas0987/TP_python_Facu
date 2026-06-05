@@ -1,9 +1,11 @@
 
 lista=[1,2,3,4,5]
-
-def maxnum(lista):
-    if lista[0]== max(lista):
-        return 0
+i=0
+def maxnum(lista,i):
+    if lista[i]>=(lista[i+1]):
+        return lista[i]
+    
     else:
-        return (maxnum(lista[1:])*0) + max(lista)
-print(maxnum(lista))
+        i+=1
+        return (maxnum(lista[i]))
+print(maxnum(lista,i))

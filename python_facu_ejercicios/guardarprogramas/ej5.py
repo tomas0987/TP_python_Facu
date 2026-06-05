@@ -16,12 +16,18 @@ print(f"la cantidad de lineas que tiene el archivo son:{contador_lineas}")
 with open("frases.txt","r",encoding="utf-8")as archivo:
     contenido=(archivo.read())
     a=contenido.replace("\n"," ")
-    print(a)
+    
     b= a.replace(" ","")
-    print(b)
+    
     for i in b:
         contador_letras+=1
-print (f"el total de plabras que tiene el texto es: {contador_letras}")
-      
-
+print (f"el total de letras que tiene el texto es: {contador_letras}")
+contador_palabras=0    
+with open("frases.txt","r",encoding="utf-8")as archivo:
+    contenido=archivo.read()
+    z=contenido.split()
+    for i in z:
+        contador_palabras+=1
+    print(f"el total de palabras que tiene es:{contador_palabras}")
+    
         
