@@ -1,71 +1,68 @@
 import random, shutil, time
-class equipment:
+
+# ---------------- EQUIPAMIENTO ----------------
+
+class Equipment:
     def HeroicSword(self, equip):
-        self.equip = equip
-        if equip == True:
+        if equip:
             heroe.damage *= 1.5
-            print("te has equipado la espada heroica tu danio aumento un 50%")
-            
+            print("Te has equipado la espada heroica. Tu daño aumentó un 50%.")
+
+
+# ---------------- POCIONES ----------------
+
+class Potion:
+    def health_potion(self, amount):
+        if heroe.health >= heroe.maxHealth:
+            print("Salud al máximo, no se precisa curar.")
+            return
         
+        heroe.health += amount
+        if heroe.health > heroe.maxHealth:
+            heroe.health = heroe.maxHealth
+        
+        print(f"Te has curado. HP actual: {heroe.health}")
 
-class potion:
-    def health_potion(self, amount):
-      self.amount = amount
-      heroe.health += self.amount
-      if heroe.life == 500:
-          print("Salud al maximo no se precisa de curar")
-    def health_potion(self, amount):
-      self.amount = amount
-      heroe.health += self.amount
-      if heroe.life == 500:
-          print("Salud al maximo no se precisa de curar")
-      else:
-          print("Te has curado")
-          print(f"HP: {p.currenhealth}")
-          print("Te has curado")
-          print(f"HP: {p.currenhealth}")
 
-class character:
-    def __init__(self, name, health, _currentHealth, damage, critChance, critMultiplier):
-    def __init__(self, name, health, _currentHealth, damage, critChance, critMultiplier):
+# ---------------- PERSONAJE ----------------
+
+class Character:
+    def __init__(self, name, health, damage, critChance, critMultiplier):
         self.name = name
+        self.maxHealth = health
         self.health = health
-        self._currentHealth= _currentHealth
-        self.health = health
-        self._currentHealth= _currentHealth
         self.damage = damage
-        self.critChance = critChance
-        self.critMultiplier = critMultiplier
         self.critChance = critChance
         self.critMultiplier = critMultiplier
 
     def attack(self, target):
         realDamage = self.damage * random.uniform(0.9, 1.15)
 
-        target.receiveDamage(realDamage)
-        realDamage = self.damage * random.uniform(0.9, 1.15)
+        # crítico
+        if random.random() < self.critChance:
+            realDamage *= self.critMultiplier
+            print("¡Golpe crítico!")
 
+        print(f"{self.name} atacó a {target.name} causando {int(realDamage)} de daño.")
         target.receiveDamage(realDamage)
     
     def receiveDamage(self, damage):
         self.health -= damage
         if self.health <= 0:
-            print(f"Has matado a {self.name}...")
-        self.health -= damage
-        if self.health <= 0:
-            print(f"Has matado a {self.name}...")
+            self.health = 0
+            print(f"{self.name} ha sido derrotado...")
         else:
-            print(f"{self.name} tiene {self.health} puntos de vida.")
-    
+            print(f"{self.name} tiene {int(self.health)} puntos de vida restantes.")
+
     def getCurrentHealth(self):
-        return self._currentHealth
+        return self.health
 
-# "Interfaz" profesional1
-width = shutil.get_terminal_size().columns # Para centrar el titulo
 
-# Darle color al logo 31m: rojo, 37m: blanco
+# ---------------- INTERFAZ ----------------
 
-logo="""                                
+width = shutil.get_terminal_size().columns
+
+logo = """                                
 \033[31m                   ▄▄                \033[0m
 \033[31m              ██   ██                \033[0m
 \033[31m ████▄ ██ ██ ▀██▀▀ ████▄ ▄███▄ ████▄ \033[0m
@@ -82,36 +79,50 @@ logo="""
 for line in logo.split("\n"):
     print(line.center(width))
 
-creditos ="""
-\033[30m       Built by:     \033[0m
-\033[30m    Tomas Sanchez    \033[0m
-\033[30m     Franco Leone    \033[0m
-"""
-
 print("\033[30mPor: Tomas Sanchez y Franco Leone\033[0m".center(width))
-equipo=equipment()
-heroe = character("Heroe",500,500,50,0.1,2)
 
-grandote = character("Grandote", 2000, 2000, 75, 0, 0)
 
-if grandote.getCurrentHealth() <= 0: # Arreglar -----------------------------------------------------------------------------------------------------
-    time.sleep(1) # Es para agregar suspenso al juego, completamente necesario
-    print("Grandecito llevaba consigo un duende!")
-    duendecito = character("duende",200, 200, 30, 0.666, 1.5)
+# ---------------- OBJETOS DEL JUEGO ----------------
+
+equipo = Equipment()
+pociones = Potion()
+
+heroe = Character("Heroe", 500, 50, 0.1, 2)
+grandote = Character("Grandote", 2000, 75, 0, 0)
+
+
+# ---------------- LOOP PRINCIPAL ----------------
 
 while True:
-    option=int(input("elige lo que desea hacer el heroe:\n 1: atacar\n 2: abrir mochila"))
-    if option==1:
+    option = int(input("\nElige lo que desea hacer el héroe:\n 1: Atacar\n 2: Abrir mochila\n> "))
+
+    if option == 1:
         heroe.attack(grandote)
-    elif option==2:
+
+        if grandote.health <= 0:
+            print("¡Has derrotado al Grandote!")
+            break
+
+        # Turno del enemigo
+        print("\n--- Turno del enemigo ---")
+        grandote.attack(heroe)
+
+        if heroe.health <= 0:
+            print("Has muerto...")
+            break
+
+    elif option == 2:
         while True:
-            optionBag=int(input("mochila abierta que desea hacer?\n 1: Abrir bolsa de pociones\n 2: armamento"))
-            if optionBag==1:
-                potion.health_potion(heroe)
-            elif optionBag==2:
-                confirmoespada=input("solo posees una espada, deseas equiparla?").lower()
-                if confirmoespada=="si":
+            optionBag = int(input("\nMochila abierta. ¿Qué desea hacer?\n 1: Poción de vida\n 2: Equipar espada\n 3: Volver\n> "))
+
+            if optionBag == 1:
+                pociones.health_potion(200)
+
+            elif optionBag == 2:
+                confirmoespada = input("Solo posees una espada. ¿Deseas equiparla? (si/no): ").lower()
+                if confirmoespada == "si":
                     equipo.HeroicSword(True)
-                    break
-                
-    
+                break
+
+            elif optionBag == 3:
+                break
