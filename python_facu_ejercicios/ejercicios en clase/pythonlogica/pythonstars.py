@@ -14,16 +14,28 @@ class potion:
       heroe.health += self.amount
       if heroe.life == 500:
           print("Salud al maximo no se precisa de curar")
+    def health_potion(self, amount):
+      self.amount = amount
+      heroe.health += self.amount
+      if heroe.life == 500:
+          print("Salud al maximo no se precisa de curar")
       else:
+          print("Te has curado")
+          print(f"HP: {p.currenhealth}")
           print("Te has curado")
           print(f"HP: {p.currenhealth}")
 
 class character:
     def __init__(self, name, health, _currentHealth, damage, critChance, critMultiplier):
+    def __init__(self, name, health, _currentHealth, damage, critChance, critMultiplier):
         self.name = name
         self.health = health
         self._currentHealth= _currentHealth
+        self.health = health
+        self._currentHealth= _currentHealth
         self.damage = damage
+        self.critChance = critChance
+        self.critMultiplier = critMultiplier
         self.critChance = critChance
         self.critMultiplier = critMultiplier
 
@@ -31,8 +43,14 @@ class character:
         realDamage = self.damage * random.uniform(0.9, 1.15)
 
         target.receiveDamage(realDamage)
+        realDamage = self.damage * random.uniform(0.9, 1.15)
+
+        target.receiveDamage(realDamage)
     
     def receiveDamage(self, damage):
+        self.health -= damage
+        if self.health <= 0:
+            print(f"Has matado a {self.name}...")
         self.health -= damage
         if self.health <= 0:
             print(f"Has matado a {self.name}...")
