@@ -1,4 +1,7 @@
 import random, shutil, time
+import tkinter as tk
+
+
 
 # ---------------- EQUIPAMIENTO ----------------
 
@@ -192,3 +195,6 @@ while True:
                     break
         case _:
             print("Opción no válida.")
+
+#creacion de ventana 
+
