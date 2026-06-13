@@ -118,9 +118,12 @@ def pedirVidaHeroe():
     def confirmar():
         try:
             vida = int(entrada.get())
-        except:
-            vida = 5000
-            escribirConsola("Valor inválido, se asigna 5000.")
+
+            if vida <= 0:
+                raise ValueError
+        except ValueError:
+            vida = 500
+            escribirConsola("Valor inválido, se asigna 500.")
 
         global heroe
         heroe = Character("Heroe", vida, espada)
