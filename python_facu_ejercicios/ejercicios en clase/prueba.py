@@ -1,10 +1,7 @@
-
-prueba = "zmor"
-for i in range(len(prueba) - 1):
-    primera = prueba[i]
-    segunda = prueba[i + 1]
-    print(primera, segunda)
-    if primera > segunda:
-        print('la palabra no esta ordenada alfabeticamente')
+n = int(input("ingrese un numero: "))
+def factorial(n):
+    if n == 0:
+        return 1
     else:
-        print('la palabra esta ordenada alfabeticamente')
+        return n * factorial(n-1)
+print("el factorial de ", n, "es: ", factorial(n))
