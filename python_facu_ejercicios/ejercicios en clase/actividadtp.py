@@ -1,3 +1,4 @@
+import random
 #---------------ej 1----------------
 
 
@@ -212,4 +213,36 @@ def suma(lista):
 
 print(suma(lista))
 #---------------------------ej20---------------
+import random
 
+# Lista ordenada
+lista = [1,2,3,4,5,6,7,8,9,10]
+
+# Número secreto
+num = random.randint(1,10)
+print("Número secreto generado (debug):", num)
+
+def busqueda_binaria(lista, num, inicio, fin):
+
+    if inicio > fin:
+        return -1
+
+    medio = (inicio + fin) // 2
+
+    if lista[medio] == num:
+        return medio
+
+  
+    elif num < lista[medio]:
+        return busqueda_binaria(lista, num, inicio, medio - 1)
+
+
+    else:
+        return busqueda_binaria(lista, num, medio + 1, fin)
+
+resultado = busqueda_binaria(lista, num, 0, len(lista)-1)
+
+if resultado != -1:
+    print(f"¡Número encontrado! Está en el índice {resultado}")
+else:
+    print("El número no está en la lista")

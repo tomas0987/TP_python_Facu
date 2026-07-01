@@ -7,14 +7,26 @@ from PIL import Image, ImageTk
 ventana = tk.Tk()
 ventana.title("python Stars")
 ventana.geometry("800x600")
-
 bg_imagen = Image.open("C:/Users/sanch/Downloads/Copilot_20260609_172546.png")
 bg_photo = ImageTk.PhotoImage(bg_imagen)
 
 fondo = tk.Label(ventana, image=bg_photo)
 fondo.image = bg_photo
 fondo.place(x=0, y=0, relwidth=1, relheight=1)
+#sprites
+img_heroe= Image.open("C:/Users/sanch/Downloads/heroe.png")
+img_heroe=img_heroe.resize((250,220))
+heroe_photo=ImageTk.PhotoImage(img_heroe)
+img_grandote = Image.open("C:/Users/sanch/Downloads/grandote.png")
+img_grandote = img_grandote.resize((250, 250))
+grandote_photo = ImageTk.PhotoImage(img_grandote)
 
+# Mostrar imágenes en pantalla
+label_heroe = tk.Label(ventana, image=heroe_photo, bg=None, bd=0 , highlightthickness=0)
+label_heroe.place(x=180, y=300)
+
+label_grandote = tk.Label(ventana, image=grandote_photo,bg=None, bd=0,highlightthickness=0)
+label_grandote.place(x=900, y=20)
 # HUD
 caja = tk.Frame(ventana, width=850, height=1000, bg="gray", highlightbackground="brown", highlightthickness=3)
 caja.place(x=700, y=480)
