@@ -7,15 +7,15 @@ from PIL import Image, ImageTk
 ventana = tk.Tk()
 ventana.title("python Stars")
 
-# Cargar fondo SIN deformarlo
-bg_imagen = Image.open("imagenes/Copilot_20260609_172546.png")
+# Cargar fondo 
+bg_imagen = Image.open("imagenes/fondo.png")   
 ancho, alto = bg_imagen.size
 bg_photo = ImageTk.PhotoImage(bg_imagen)
 
 # Ajustar ventana al tamaño real del fondo
 ventana.geometry(f"{ancho}x{alto}")
 
-# Canvas para permitir transparencia REAL
+# Canvas para permitir transparencia
 canvas = tk.Canvas(ventana, width=ancho, height=alto, highlightthickness=0)
 canvas.place(x=0, y=0)
 
@@ -24,12 +24,12 @@ canvas.create_image(0, 0, image=bg_photo, anchor="nw")
 
 # ---------------- SPRITES ----------------
 
-img_heroe = Image.open("imagenes/heroe.png")
+img_heroe = Image.open("imagenes/heroe.png")   
 img_heroe = img_heroe.resize((250, 220), Image.NEAREST)
 heroe_photo = ImageTk.PhotoImage(img_heroe)
 canvas.create_image(170, 390, image=heroe_photo, anchor="nw")
 
-img_grandote = Image.open("imagenes/grandote.png")
+img_grandote = Image.open("imagenes/grandote.png")   
 img_grandote = img_grandote.resize((250, 250), Image.NEAREST)
 grandote_photo = ImageTk.PhotoImage(img_grandote)
 canvas.create_image(900, 140, image=grandote_photo, anchor="nw")
@@ -75,15 +75,13 @@ consola.place(x=1, y=20)
 scroll.config(command=consola.yview)
 
 
-# ---------------- CONSOLA FLUIDA CON COLA ----------------
+# ---------------- CONSOLA FLUIDA (OPCIÓN 2 OPTIMIZADA) ----------------
 
 cola_mensajes = []
 escribiendo = False
 
-def escribirConsola(texto, velocidad=15):
-    global escribiendo
+def escribirConsola(texto, velocidad=5):
     cola_mensajes.append((texto, velocidad))
-
     if not escribiendo:
         procesar_cola()
 
@@ -101,11 +99,11 @@ def procesar_cola():
         if i < len(texto):
             consola.insert(tk.END, texto[i])
             consola.see(tk.END)
-            consola.after(velocidad, lambda: escribir_lento(i+1))
+            ventana.after(velocidad, lambda: escribir_lento(i+1))
         else:
             consola.insert(tk.END, "\n")
             consola.see(tk.END)
-            procesar_cola()
+            ventana.after(50, procesar_cola)
 
     escribir_lento()
 
@@ -237,7 +235,8 @@ def reiniciar_juego():
 pociones = Potion()
 espada = Arma("Espada", 50, 100, 0.1, 2)
 hacha = Arma("Hacha", 80, 90, 0, 0)
-armadura_heroica= Armadura("armadura heroica",35)
+armadura_heroica = Armadura("Armadura Heroica", 35)
+
 # ---------------- INPUT DE VIDA ----------------
 
 def pedirVidaHeroe():
@@ -260,7 +259,7 @@ def pedirVidaHeroe():
             escribirConsola("Valor inválido, se asigna 500.")
 
         global heroe
-        heroe = Character("Heroe", vida, espada,None)
+        heroe = Character("Heroe", vida, espada, None)
 
         frame_vida.destroy()
         actualizar_barras()
@@ -270,7 +269,7 @@ def pedirVidaHeroe():
 
 pedirVidaHeroe()
 
-grandote = Character("Grandote", 2000, hacha,None)
+grandote = Character("Grandote", 2000, hacha, None)
 actualizar_barras()
 
 # ---------------- FUNCIONES ----------------
@@ -283,14 +282,15 @@ def attack():
 def equipar_arma(arma):
     heroe._weapon = arma
     escribirConsola(f"Has equipado: {arma.name}")
+
 def equipar_armadura(armadura):
     if heroe._armor is None:
         heroe._armor = armadura
-        
         escribirConsola(f"Has equipado: {armadura._name}")
     else:
-            heroe._armor= None
-            escribirConsola(f"has quitado la armadura. Ahora recibis el danio completo")
+        heroe._armor = None
+        escribirConsola("Has quitado la armadura. Ahora recibes daño completo.")
+
 def open_mochila():
     mochila = tk.Toplevel(ventana)
     mochila.title("Mochila")
@@ -308,7 +308,8 @@ def open_mochila():
 
     tk.Button(mochila, text="Equipar Hacha", width=20, height=2,
               command=lambda: equipar_arma(hacha)).pack(pady=10)
-    tk.Button(mochila, text="Equipar armadura", width=20, height=2,
+
+    tk.Button(mochila, text="Equipar Armadura", width=20, height=2,
               command=lambda: equipar_armadura(armadura_heroica)).pack(pady=10)
 
 # ---------------- BOTONES ----------------
