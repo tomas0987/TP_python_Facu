@@ -1,6 +1,16 @@
+import os
+import sys
+
+# Ruta absoluta del archivo .py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+os.chdir(BASE_DIR)
+
 import random
 import tkinter as tk
 from PIL import Image, ImageTk
+
+# ---------------- CONFIGURACIÓN CONSOLA ----------------
+MAX_LINEAS_CONSOLA = 11  # cuando supera esto, se limpia
 
 # ---------------- INTERFAZ PRINCIPAL ----------------
 
@@ -12,14 +22,10 @@ bg_imagen = Image.open("imagenes/fondo.png")
 ancho, alto = bg_imagen.size
 bg_photo = ImageTk.PhotoImage(bg_imagen)
 
-# Ajustar ventana al tamaño real del fondo
 ventana.geometry(f"{ancho}x{alto}")
 
-# Canvas para permitir transparencia
 canvas = tk.Canvas(ventana, width=ancho, height=alto, highlightthickness=0)
 canvas.place(x=0, y=0)
-
-# Dibujar fondo en el canvas
 canvas.create_image(0, 0, image=bg_photo, anchor="nw")
 
 # ---------------- SPRITES ----------------
@@ -56,31 +62,27 @@ caja = tk.Frame(ventana, width=850, height=1000, bg="#333",
                 highlightbackground="gold", highlightthickness=4)
 caja.place(x=700, y=480)
 
-# Scrollbar
-scroll = tk.Scrollbar(caja)
-scroll.place(x=350, y=20, height=480)
-
-# Consola con scroll
 consola = tk.Text(
     caja,
     width=35,
     height=30,
     bg="black",
     fg="white",
-    font="Consolas",
-    yscrollcommand=scroll.set
+    font="Consolas"
 )
 consola.place(x=1, y=20)
 
-scroll.config(command=consola.yview)
-
-
-# ---------------- CONSOLA FLUIDA (OPCIÓN 2 OPTIMIZADA) ----------------
+# ---------------- CONSOLA FLUIDA ----------------
 
 cola_mensajes = []
 escribiendo = False
 
 def escribirConsola(texto, velocidad=5):
+    # LIMPIAR CONSOLA SI SUPERA EL LÍMITE
+    lineas = int(consola.index('end-1c').split('.')[0])
+    if lineas > MAX_LINEAS_CONSOLA:
+        consola.delete("1.0", tk.END)
+
     cola_mensajes.append((texto, velocidad))
     if not escribiendo:
         procesar_cola()
@@ -98,11 +100,9 @@ def procesar_cola():
     def escribir_lento(i=0):
         if i < len(texto):
             consola.insert(tk.END, texto[i])
-            consola.see(tk.END)
             ventana.after(velocidad, lambda: escribir_lento(i+1))
         else:
             consola.insert(tk.END, "\n")
-            consola.see(tk.END)
             ventana.after(50, procesar_cola)
 
     escribir_lento()
@@ -168,7 +168,6 @@ class Character:
             damage = self._armor.absorbDamage(damage)
 
         self.health -= damage
-
         if self.health < 0:
             self.health = 0
 
@@ -269,7 +268,7 @@ def pedirVidaHeroe():
 
 pedirVidaHeroe()
 
-grandote = Character("Grandote", 2000, hacha, None)
+grandote = Character("Grandote", 1000, hacha, None)
 actualizar_barras()
 
 # ---------------- FUNCIONES ----------------
