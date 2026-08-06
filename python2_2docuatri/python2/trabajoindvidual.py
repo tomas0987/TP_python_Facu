@@ -75,9 +75,20 @@ listanorepeticion = []
 def repe(lista, num):
     return num in lista
 
+def chequearCelda(fila,col):
+    if 0<= fila < 6 and 0 <= col <6:
+        if oculta[fila][col] == 0:
+            visible[fila][col] = "🛜 "
+        else:
+            visible[fila][col] = "🧍"
+
+def chequearAdyacentes(fila,col):
+    chequearCelda(fila + 1, col)
+    chequearCelda(fila - 1, col)
+    chequearCelda(fila, col + 1)
+    chequearCelda(fila, col - 1)
 
 while True:
-    print("\n--- MATRIZ VISIBLE ---")
     mostrarmatrizusuario(visible)
 
     print("\nOpciones:")
@@ -106,27 +117,9 @@ while True:
             fila = num // 6
             col = num % 6
             visible[fila][col] = "📡"
-            if fila + 1 < 6:
-                if oculta[fila + 1][col] == 0:
-                    visible[fila+1][col]= "🛜."
-                else:
-                    visible[fila+1][col]= "🧍"
-                
-            if fila - 1 >= 0:
-                 if oculta[fila -1][col] == 0:
-                    visible[fila-1][col]= "🛜."
-                 else:
-                    visible[fila-1][col]= "🧍"
-            if col + 1 < 6:
-                 if oculta[fila][col+1] == 0:
-                    visible[fila][col+1]= "🛜."
-                 else:
-                    visible[fila][col+1]= "🧍"
-            if col - 1 >= 0:
-                 if oculta[fila][col-1] == 0:
-                    visible[fila][col-1]= "🛜."
-                 else:
-                    visible[fila][col-1]= "🧍"
+
+            chequearAdyacentes(fila,col)
+            
             if señales > 0:
                 print(f"📡 Se detectaron {señales} náufragos alrededor.")
             else:
