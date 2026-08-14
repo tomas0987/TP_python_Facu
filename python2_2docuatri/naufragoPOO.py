@@ -43,7 +43,7 @@ class Tablero:
 
     def distribuirNaufragos(self, cantidad):
         colocados = 0
-        Naufrago.PosicionValida(columna,fila,self.tablero,self.hayNaufrago)
+        Naufrago.PosicionValida(columna,fila,self.tablero)
         while colocados < cantidad:
             fila = random.randint(0, self.ladoMaximo - 1)
             columna = random.randint(0, self.ladoMaximo - 1)
