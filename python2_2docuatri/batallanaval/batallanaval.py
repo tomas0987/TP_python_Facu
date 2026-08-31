@@ -17,8 +17,6 @@ def leer_entero(prompt, minimo, maximo):
             print("Entrada inválida. Ingrese un número entero.")
 
 
-    
-    
 # ------------------------------
 # OPCIONES DEL TABLERO
 # ------------------------------
@@ -38,26 +36,11 @@ def OpcionesTablero():
         return 10, 10, opcion
     return 12, 12, opcion
 
-# clase Bomba
 
-class BOMBA:
-    
-    def __init__(self,filabomba,columnabomba):
-        self.filabomba=filabomba
-        self.columnabomba=columnabomba
-    
-def colocarBomba(fila,columna,tablero):
-    filabomba=leer_entero("filas",1,tablero.filas)-1
-    columnabomba=leer_entero("columnas",1,tablero.columnas)-1
-    fila=filabomba
-    columna=columnabomba
-    if tablero_maquina_oculto.matriz[fila][columna]!="🌊":
-        print(f"has derribado una parte de un barco")
-        tablero_maquina_oculto.matriz[fila][columna]="💣"
-    return fila,columna  
 # ------------------------------
 # CLASE TABLERO
 # ------------------------------
+
 class TABLERO:
 
     def __init__(self, filas, columnas, visible=False):
@@ -71,39 +54,28 @@ class TABLERO:
             if self.visible:
                 print(*fila)
             else:
-                # Oculta cualquier símbolo de barco mostrando solo agua
                 oculto = [cel if cel == "🌊" else "🌊" for cel in fila]
                 print(*oculto)
 
     def colocar_barco(self, fila, columna, tamaño, orientacion, simbolo=None):
         posiciones = []
-        # Si no se pasó un símbolo, elegir según el tamaño
+
         if simbolo is None:
-            if tamaño == 2:
-                simbolo = "⛵"
-            elif tamaño == 3:
-                simbolo = "🚤"
-            else:
-                simbolo = "🚢"
+            simbolo = "⛵" if tamaño == 2 else "🚤" if tamaño == 3 else "🚢"
 
         for i in range(tamaño):
             if orientacion == 1:  # izquierda
-                c = columna - i
-                f = fila
+                f, c = fila, columna - i
             elif orientacion == 2:  # derecha
-                c = columna + i
-                f = fila
+                f, c = fila, columna + i
             elif orientacion == 3:  # arriba
-                f = fila - i
-                c = columna
+                f, c = fila - i, columna
             else:  # abajo
-                f = fila + i
-                c = columna
+                f, c = fila + i, columna
 
             if f < 0 or f >= self.filas or c < 0 or c >= self.columnas:
                 return False
 
-            # La matriz usa "🌊" para agua; si no es agua, hay colisión
             if self.matriz[f][c] != "🌊":
                 return False
 
@@ -196,6 +168,7 @@ def colocar_barcos_aleatorios(tablero, opcion):
     for tipo, cantidad in tipos.items():
         tamaño = {1: 2, 2: 3, 3: 4}[tipo]
         simbolos = {1: "⛵", 2: "🚤", 3: "🚢"}
+
         for _ in range(cantidad):
             colocado = False
             while not colocado:
@@ -203,6 +176,24 @@ def colocar_barcos_aleatorios(tablero, opcion):
                 columna = random.randrange(tablero.columnas)
                 orientacion = random.randint(1, 4)
                 colocado = tablero.colocar_barco(fila, columna, tamaño, orientacion, simbolo=simbolos[tipo])
+
+
+# ------------------------------
+# BOMBA
+# ------------------------------
+
+def colocarBomba(tablero):
+    print("\n--- TU TURNO: LANZAR BOMBA ---")
+    fila = leer_entero("Fila: ", 1, tablero.filas) - 1
+    columna = leer_entero("Columna: ", 1, tablero.columnas) - 1
+
+    if tablero.matriz[fila][columna] != "🌊":
+        print("🔥 ¡has derribado una parte de un barco!")
+        tablero.matriz[fila][columna] = "💣"
+    else:
+        print("🌊 la bomba no ha impactado.")
+
+    return fila, columna
 
 
 # ------------------------------
@@ -229,6 +220,8 @@ tablero_usuario_visible.mostrar()
 print("\nTablero de la máquina (oculto):")
 tablero_maquina_oculto.mostrar()
 
-# Ciclo de juego: turno del usuario
-fila, columna = colocarBomba(0, 0, tablero_maquina_oculto)
- 
+# Turno del usuario
+fila, columna = colocarBomba(tablero_maquina_oculto)
+
+print("\nTablero de la máquina actualizado (oculto):")
+tablero_maquina_oculto.mostrar()
